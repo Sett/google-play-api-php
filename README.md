@@ -1,4 +1,4 @@
 google-play-api-php
 ===================
 
-Google Play API for PHP5
+Non official Google Play API that allows you to access market information, for php
