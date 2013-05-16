@@ -46,14 +46,17 @@ class GooglePlayAPI {
 		
 		$curl = curl_init();
 		
-		curl_setopt( $curl, CURLOPT_URL           , GooglePlayAPI::URL_AUTH );
-		curl_setopt( $curl, CURLOPT_HEADER        , 0        );
-		curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1        );
-		curl_setopt( $curl, CURLOPT_POST          , 1        );
-		curl_setopt( $curl, CURLOPT_POSTFIELDS    , $post    );
-		curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, true     );
-		curl_setopt( $curl, CURLOPT_SSL_VERIFYPEER, 0        );
-		curl_setopt( $curl, CURLOPT_HTTPHEADER    , $headers );
+		curl_setopt_array($curl, array(
+				CURLOPT_URL            => GooglePlayAPI::URL_AUTH,
+				CURLOPT_HEADER         => 0        ,
+				CURLOPT_RETURNTRANSFER => 1        ,
+				CURLOPT_POST           => 1        ,
+				CURLOPT_POSTFIELDS     => $post    ,
+				CURLOPT_FOLLOWLOCATION => true     ,
+				CURLOPT_SSL_VERIFYPEER => 0        ,
+				CURLOPT_HTTPHEADER     => $headers
+			)
+		);
 		
 		
 		$result = curl_exec( $curl );
@@ -62,20 +65,12 @@ class GooglePlayAPI {
 		
 		
 		/* Process response */
-		
-		$aRet = explode( "\n", $result );
-		
-		foreach ($aRet as $line) {
-			
-			if ( substr( $line, 0, 5 ) == "Auth=" ) {
-				
-				$token = substr($line,5);
-				
-				return $token;
-			}
-		}
-
-		return false;
+		/*
+		Convert answer into url-like string. 
+		If there is an Auth, then it will be the variable $Auth
+		*/
+		parse_str(str_replace("\n", "&", $result));
+		return isset($Auth) ? $Auth : false;
 	}
 	
 	/**
