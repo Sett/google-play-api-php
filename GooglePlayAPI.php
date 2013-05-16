@@ -85,18 +85,13 @@ class GooglePlayAPI {
 	private function buildPostFields( $email, $password ){
 		
 		$postFields	= array(
-			"Email"			=> urlencode( $email    ),
-			"Passwd"		=> urlencode( $password ),
+			"Email"		=> urlencode( $email    ),
+			"Passwd"	=> urlencode( $password ),
 			"accountType"	=> urlencode( "GOOGLE"  ),
-			"service"		=> urlencode( "android" ), );
+			"service"	=> urlencode( "android" ), 
+		);
 			
-		$postPairs = array();
-		
-		foreach( $postFields as $key => $value ){
-			$postPairs[] = ( $key . '=' . $value );
-		}
-		
-		return implode( '&', $postPairs );
+		return http_build_query($postFields);
 	}
 
 }
